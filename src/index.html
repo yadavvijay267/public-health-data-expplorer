@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Health Data Explorer</title>
+  <meta name="description" content="Explore public COVID-19 data by country: compare countries, normalise per capita, and view 7-day rolling averages.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <h1>🌍 Public Health Data Explorer</h1>
+      <p class="subtitle">COVID-19 data by country, from the free
+        <a href="https://disease.sh/" target="_blank" rel="noopener">disease.sh</a> API.
+        Works offline too — a built-in sample dataset is used when the API is unreachable.</p>
+      <p class="status" id="dataStatus" role="status">Loading live data…</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="cards" aria-label="Global totals">
+      <div class="card"><span class="label">Total cases</span><strong id="statCases">—</strong></div>
+      <div class="card"><span class="label">Total deaths</span><strong id="statDeaths">—</strong></div>
+      <div class="card"><span class="label">Recovered</span><strong id="statRecovered">—</strong></div>
+      <div class="card"><span class="label">Active cases</span><strong id="statActive">—</strong></div>
+      <div class="card"><span class="label">Cases today</span><strong id="statToday">—</strong></div>
+      <div class="card"><span class="label">Countries tracked</span><strong id="statCountries">—</strong></div>
+    </section>
+
+    <section class="controls" aria-label="Explorer controls">
+      <div class="control">
+        <label for="countrySearch">Search a country</label>
+        <input id="countrySearch" type="search" list="countryList"
+               placeholder="Type a country name, e.g. India" autocomplete="off">
+        <datalist id="countryList"></datalist>
+        <button id="searchBtn" type="button">Show country</button>
+      </div>
+
+      <fieldset class="control">
+        <legend>Compare countries (up to 3)</legend>
+        <div id="compareBoxes" class="compare-boxes"></div>
+      </fieldset>
+
+      <fieldset class="control toggles">
+        <legend>Chart options</legend>
+        <label><input type="radio" name="metric" value="cases" checked> Cases</label>
+        <label><input type="radio" name="metric" value="deaths"> Deaths</label>
+        <label><input type="radio" name="metric" value="recovered"> Recovered</label>
+        <label class="toggle"><input type="checkbox" id="perCapita"> Per 100k people (per-capita)</label>
+        <label class="toggle"><input type="checkbox" id="rollingAvg" checked> 7-day rolling average</label>
+      </fieldset>
+
+      <div class="control actions">
+        <button id="downloadBtn" type="button">⬇ Download filtered data (CSV)</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Country detail">
+      <h2 id="detailTitle">Pick a country to see its details</h2>
+      <div id="detailStats" class="detail-stats"></div>
+    </section>
+
+    <section class="panel" aria-label="Trend chart">
+      <h2 id="chartTitle">30-day trend</h2>
+      <p class="hint" id="chartHint">Select a country above to draw its trend. The dotted marker shows the peak of the selected series.</p>
+      <canvas id="trendChart" width="900" height="360" aria-label="Trend chart"></canvas>
+      <p class="legend" id="chartLegend"></p>
+    </section>
+
+    <section class="panel" aria-label="Top countries table">
+      <h2>Top countries by total cases</h2>
+      <table id="topTable">
+        <thead>
+          <tr><th>#</th><th>Country</th><th>Cases</th><th>Deaths</th><th>Recovered</th><th>Cases / 100k</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="hint">Click a row to load that country in the detail panel and chart.</p>
+    </section>
+
+    <p class="footnote">Data: disease.sh (Johns Hopkins University CSSE dataset).
+      Per-capita values divide by population and multiply by 100,000.
+      Rolling averages smooth daily noise — the raw daily values are still in the downloaded CSV.</p>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

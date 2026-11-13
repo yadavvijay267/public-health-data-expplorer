@@ -1,0 +1,3 @@
+# No Python dependencies — the dashboard is plain HTML/CSS/JS.
+# Open src/index.html in a browser, or serve it with:
+#   python3 -m http.server 8000 --directory src
